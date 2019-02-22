@@ -2,8 +2,6 @@
 #define globals_h
 //all the settings here
 
-int debugging_enabled = 1;
-
-#define LEDPIN 6
+#define LEDPIN 13
 
 #endif
