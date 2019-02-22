@@ -4,6 +4,6 @@
 
 #define STARTUP_CYCLES 20
 
-#define LEDPIN 13
+#define LEDPIN 11
 
 #endif

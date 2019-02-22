@@ -9,15 +9,17 @@ class UI
 private:
   int UI_state;
 
+  int fadeFreq;
   int ledState;
   int pwm_val;
+  bool rising;
 
 public:
   UI();
 
   void toggle();
-  void blink(int freq);
-  void fade(int freq);
+  void blink();
+  void fade();
   void update_UI(int refTick);
   void setState(int newState);
 };

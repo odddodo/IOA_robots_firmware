@@ -10,7 +10,7 @@ bool UI_on = false;
 void update_UI();
 void startup();
 
-Ticker UI_updater(update_UI, 100); //update ui every 100ms
+Ticker UI_updater(update_UI, 4); //update ui every 4ms
 Ticker startupCounter(startup, 300, STARTUP_CYCLES);
 
 void initRoutines()
@@ -30,11 +30,15 @@ void updateRoutines()
 
 void startup()
 {
+
     DEBUG(".");
+    statusInd.toggle();
     if (startupCounter.counter() > STARTUP_CYCLES - 1)
     {
+
         DEBUG("init done");
         UI_on = true;
+        statusInd.setState(2);
     }
 }
 
