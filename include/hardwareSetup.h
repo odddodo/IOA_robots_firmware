@@ -5,7 +5,7 @@
 
 void initHardware()
 {
-    Serial.begin(9600);
+    Serial.begin(DEBUG_BAUDRATE);
     Serial.println("! serial ok !");
 
     pinMode(LEDPIN, OUTPUT);

@@ -7,9 +7,8 @@ int debugging_enabled = 1;
 
 void setup()
 {
-
-  DEBUG("debugging works!");
   initHardware();
+  DEBUG("debugging works!");
   initRoutines();
 }
 

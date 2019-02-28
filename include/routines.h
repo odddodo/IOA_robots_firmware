@@ -10,8 +10,8 @@ bool UI_on = false;
 void update_UI();
 void startup();
 
-Ticker UI_updater(update_UI, 4); //update ui every 4ms
-Ticker startupCounter(startup, 300, STARTUP_CYCLES);
+Ticker startupCounter(startup, 300, STARTUP_CYCLES); //power up cycle: give some time for the router to settle
+Ticker UI_updater(update_UI, 4);                     //update ui every 4ms
 
 void initRoutines()
 {
@@ -22,6 +22,7 @@ void initRoutines()
 void updateRoutines()
 {
     startupCounter.update();
+
     if (UI_on)
     {
         UI_updater.update();
