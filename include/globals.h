@@ -9,6 +9,8 @@
 #define DEBUG_UDP 1
 #define DEBUG_MOTORS 0
 
+#define SOFT_BAUDRATE 9600
+
 #define LEDPIN 6
 
 #endif

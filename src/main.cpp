@@ -11,6 +11,7 @@ void setup()
   initHardware();
   initUDPServer();
   initRoutines();
+  initMotors();
 }
 
 void loop()
