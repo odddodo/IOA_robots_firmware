@@ -5,6 +5,6 @@
 #define STARTUP_CYCLES 20
 #define DEBUG_BAUDRATE 9600
 
-#define LEDPIN 11
+#define LEDPIN 6
 
 #endif

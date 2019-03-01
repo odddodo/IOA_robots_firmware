@@ -2,21 +2,27 @@
 #define routines_h
 #include <Ticker.h>
 #include <UI.h>
+#include <allTheTalking.h>
 #include <debug.h>
 
 UI statusInd;
+
 bool UI_on = false;
 
 void update_UI();
 void startup();
+void handle_UDP_talking();
 
 Ticker startupCounter(startup, 300, STARTUP_CYCLES); //power up cycle: give some time for the router to settle
 Ticker UI_updater(update_UI, 4);                     //update ui every 4ms
+Ticker UDP_talker(handleIncommmingPackets, 10);
 
 void initRoutines()
 {
+    initUDPServer();
     startupCounter.start();
     UI_updater.start();
+    UDP_talker.start();
 }
 
 void updateRoutines()
@@ -27,6 +33,8 @@ void updateRoutines()
     {
         UI_updater.update();
     }
+
+    UDP_talker.update();
 }
 
 void startup()
