@@ -16,10 +16,18 @@ void UI::update_UI(int refTick)
     switch (UI_state)
     {
     case 0:
-        DEBUG("whatever state");
+        if (DEBUG_UI)
+        {
+            DEBUG("whatever state");
+        }
+
         break;
     case 1:
-        DEBUG("another state");
+        if (DEBUG_UI)
+        {
+            DEBUG("another state");
+        }
+
         if (refTick % fadeFreq == 0)
         {
             toggle();
@@ -30,10 +38,18 @@ void UI::update_UI(int refTick)
         {
             fade();
         }
-        DEBUG(pwm_val);
+        if (DEBUG_UI)
+        {
+            DEBUG(pwm_val);
+        }
+
         break;
     default:
-        DEBUG("default state");
+        if (DEBUG_UI)
+        {
+            DEBUG("default state");
+        }
+
         break;
     }
 }

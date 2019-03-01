@@ -7,8 +7,9 @@ int debugging_enabled = 1;
 
 void setup()
 {
+  DEBUG("alive!");
   initHardware();
-  DEBUG("debugging works!");
+  initUDPServer();
   initRoutines();
 }
 

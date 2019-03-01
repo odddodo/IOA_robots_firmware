@@ -6,8 +6,8 @@
 #include <SPI.h>
 
 int localPort = 8888;
-char replyBuffer[] = "got it!";
 char receiveBuffer[UDP_TX_PACKET_MAX_SIZE];
+char replyBuffer[] = "got it";
 IPAddress myIP(192, 168, 0, 100);
 byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
 EthernetUDP Udp;
@@ -24,8 +24,18 @@ void handleIncommmingPackets()
     if (packetSize)
     {
         Udp.read(receiveBuffer, UDP_TX_PACKET_MAX_SIZE);
-        DEBUG(receiveBuffer);
+        if (DEBUG_UDP)
+        {
+            DEBUG(receiveBuffer);
+        }
     }
+}
+
+void handleReplies()
+{
+    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+    Udp.write(replyBuffer);
+    Udp.endPacket();
 }
 
 #endif
