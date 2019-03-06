@@ -3,6 +3,7 @@
 #include <globals.h>
 #include <SoftwareSerial.h>
 #include <Sabertooth.h>
+#include <fuzzyLogic.h>
 
 SoftwareSerial softSerial(NOT_A_PIN, 3);
 Sabertooth M_Front(128, softSerial);
@@ -20,6 +21,11 @@ void initMotors()
     halt();
 }
 
+double AGGR_PWR(double sp, double dir, double trn, double hlt)
+{
+    return fuzzyOR(fuzzyOR(sp, dir), fuzzyAND(trn, fuzzyNOT(hlt)));
+}
+
 void drive(int driveData[])
 {
     int FB = driveData[0];
@@ -27,10 +33,26 @@ void drive(int driveData[])
     int TRN = driveData[2];
     int SMAX = driveData[3];
 
-    int MFL_speed = 127;
-    int MFR_speed = 127;
-    int MBL_speed = 127;
-    int MBR_speed = 127;
+    //translate crisp joystic values into fuzzy set membership degrees:
+
+    double f_FWD = fuzzyGrade(FB, F_GRD_LO, F_GRD_HI);
+    double f_FB_HLT = fuzzyTriangle(FB, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
+    double f_BCK = fuzzyRevGrade(FB, F_REV_GRD_LO, F_REV_GRD_HI);
+    double f_L = fuzzyGrade(LR, F_GRD_LO, F_GRD_HI);
+    double f_FR_HLT = fuzzyTriangle(LR, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
+    double f_R = fuzzyRevGrade(LR, F_REV_GRD_LO, F_REV_GRD_HI);
+    double f_TL = fuzzyGrade(TRN, F_GRD_LO, F_GRD_HI);
+    double f_T_HLT = fuzzyTriangle(TRN, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
+    double f_TR = fuzzyRevGrade(TRN, F_REV_GRD_LO, F_REV_GRD_HI);
+
+    //calculate speed and direction per motor:
+
+    int MFL_speed = (int)(FWD * AGGR_PWR(f_FWD, f_R, f_TR, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_L, f_TL, f_T_HLT));
+    int MFR_speed = (int)(FWD * AGGR_PWR(f_FWD, f_L, f_TL, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_R, f_TR, f_T_HLT));
+    int MBL_speed = (int)(FWD * AGGR_PWR(f_FWD, f_L, f_TR, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_R, f_TL, f_T_HLT));
+    int MBR_speed = (int)(FWD * AGGR_PWR(f_FWD, f_R, f_TL, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_L, f_TR, f_T_HLT));
+
+    //drive the thing:
 
     M_Front.motor(LEFT, MFL_speed);
     M_Front.motor(RIGHT, MFR_speed);

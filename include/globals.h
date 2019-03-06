@@ -2,6 +2,8 @@
 #define globals_h
 //all the settings here
 
+#define LEDPIN 6
+
 #define STARTUP_CYCLES 250
 #define DEBUG_BAUDRATE 9600
 #define DEBUG_UI 0
@@ -18,6 +20,12 @@
 #define FWD 127
 #define BCK -127
 
-#define LEDPIN 6
+#define F_GRD_LO 100
+#define F_GRD_HI 190
+#define F_REV_GRD_LO 10
+#define F_REV_GRD_HI 100
+#define F_TRI_LOL 50
+#define F_TRI_HI 100
+#define F_TRI_LOR 150
 
 #endif
