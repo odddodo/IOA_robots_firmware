@@ -10,6 +10,13 @@
 #define DEBUG_MOTORS 0
 
 #define SOFT_BAUDRATE 9600
+#define MOTOR_RAMPING 30 //intermediate setting
+
+#define LEFT 1
+#define RIGHT 2
+
+#define FWD 127
+#define BCK -127
 
 #define LEDPIN 6
 
