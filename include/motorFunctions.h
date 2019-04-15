@@ -38,12 +38,12 @@ void drive(int driveData[])
     double f_FWD = fuzzyGrade(FB, F_GRD_LO, F_GRD_HI);
     double f_FB_HLT = fuzzyTriangle(FB, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
     double f_BCK = fuzzyRevGrade(FB, F_REV_GRD_LO, F_REV_GRD_HI);
-    double f_L = fuzzyGrade(LR, F_GRD_LO, F_GRD_HI);
+    double f_L = fuzzyRevGrade(LR, F_REV_GRD_LO, F_REV_GRD_HI);
     double f_FR_HLT = fuzzyTriangle(LR, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
-    double f_R = fuzzyRevGrade(LR, F_REV_GRD_LO, F_REV_GRD_HI);
-    double f_TL = fuzzyGrade(TRN, F_GRD_LO, F_GRD_HI);
+    double f_R = fuzzyGrade(LR, F_GRD_LO, F_GRD_HI);
+    double f_TL = fuzzyRevGrade(TRN, F_REV_GRD_LO, F_REV_GRD_HI);
     double f_T_HLT = fuzzyTriangle(TRN, F_TRI_LOL, F_TRI_HI, F_TRI_LOR);
-    double f_TR = fuzzyRevGrade(TRN, F_REV_GRD_LO, F_REV_GRD_HI);
+    double f_TR = fuzzyGrade(TRN, F_GRD_LO, F_GRD_HI);
 
     //calculate speed and direction per motor:
 
@@ -53,6 +53,12 @@ void drive(int driveData[])
     int MBR_speed = (int)(FWD * AGGR_PWR(f_FWD, f_R, f_TL, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_L, f_TR, f_T_HLT));
 
     //drive the thing:
+
+    if (DEBUG_MOTORS)
+    {
+
+        DEBUG("MFL:" + String(MFL_speed) + "_MFR:" + String(MFR_speed) + "_MBL:" + String(MBL_speed) + "_MBR:" + String(MBR_speed));
+    }
 
     M_Front.motor(LEFT, MFL_speed);
     M_Front.motor(RIGHT, MFR_speed);

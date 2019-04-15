@@ -77,7 +77,7 @@ void update_UI()
 
 void updateMotors()
 {
-    int recData[] = {255, 50, 100, 255};
+    int recData[] = {100, 100, 100, 100};
     drive(recData);
 }
 

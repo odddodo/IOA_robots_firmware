@@ -58,7 +58,10 @@ void UI::toggle()
 {
     ledState = !ledState;
     digitalWrite(LEDPIN, ledState);
-    DEBUG("toggled");
+    if (DEBUG_UI)
+    {
+        DEBUG("toggled");
+    }
 }
 
 void UI::fade()
