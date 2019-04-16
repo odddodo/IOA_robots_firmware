@@ -7,9 +7,9 @@
 #define STARTUP_CYCLES 25
 #define DEBUG_BAUDRATE 9600
 #define DEBUG_UI 0
-#define DEBUG_ROUTINES 1
-#define DEBUG_UDP 1
-#define DEBUG_MOTORS 1
+#define DEBUG_ROUTINES 0
+#define DEBUG_UDP 0
+#define DEBUG_MOTORS 0
 
 #define SOFT_BAUDRATE 9600
 #define MOTOR_RAMPING 30 //intermediate setting
