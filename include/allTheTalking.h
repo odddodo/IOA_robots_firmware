@@ -13,6 +13,7 @@ byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
 EthernetUDP Udp;
 
 bool gotSomeData = false;
+int driveData[4];
 
 void initUDPServer()
 {
@@ -49,6 +50,7 @@ int *decodeIncommingData(char input[])
 {
     static int output[4];
     String s = String(input);
+
     int s_end = s.lastIndexOf("_");
     int s_I = s.lastIndexOf("I") + 1;
     int I_val = s.substring(s_I, s_end).toInt();
