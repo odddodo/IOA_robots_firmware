@@ -79,7 +79,7 @@ void updateMotors()
 {
 
     //decodeIncommingData(receiveBuffer);
-    if (gotSomeData)
+    if (gotDriveData)
         drive(decodeIncommingData(receiveBuffer));
 }
 

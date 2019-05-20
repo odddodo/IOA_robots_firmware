@@ -13,12 +13,35 @@ byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
 EthernetUDP Udp;
 
 bool gotSomeData = false;
-int driveData[4];
+bool gotDriveData = false;
+
+const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H';
+String masterName;
 
 void initUDPServer()
 {
     Ethernet.begin(myMAC, myIP);
     Udp.begin(localPort);
+}
+
+void manageCmdMessages()
+{
+    switch (receiveBuffer[0])
+    {
+    case (handshake_pre):
+
+        masterName = String(receiveBuffer).substring(2);
+        DEBUG("that is a handshake! with: " + masterName);
+        break;
+    case (drive_pre):
+        DEBUG("that is a drive cmd!");
+        gotDriveData = true;
+        break;
+    default:
+        DEBUG("no idea what that is!");
+        gotDriveData = false;
+        break;
+    }
 }
 
 void handleIncommmingPackets()
@@ -28,6 +51,7 @@ void handleIncommmingPackets()
     {
         Udp.read(receiveBuffer, UDP_TX_PACKET_MAX_SIZE);
         gotSomeData = true;
+        manageCmdMessages();
         if (DEBUG_UDP)
         {
             DEBUG(receiveBuffer);
