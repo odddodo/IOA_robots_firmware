@@ -7,7 +7,7 @@
 
 int localPort = 8888;
 char receiveBuffer[UDP_TX_PACKET_MAX_SIZE];
-char replyBuffer[] = "got it";
+char replyBuffer[] = "blankReply";
 IPAddress myIP(192, 168, 0, 100);
 byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
 EthernetUDP Udp;
@@ -15,7 +15,7 @@ EthernetUDP Udp;
 bool gotSomeData = false;
 bool gotDriveData = false;
 
-const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H';
+const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R';
 String masterName;
 
 void initUDPServer()
@@ -26,12 +26,18 @@ void initUDPServer()
 
 void manageCmdMessages()
 {
+    String repl_msg;
     switch (receiveBuffer[0])
     {
     case (handshake_pre):
 
         masterName = String(receiveBuffer).substring(2);
+        repl_msg.concat(reply_pre);
+        repl_msg.concat(handshake_pre);
+        repl_msg.concat(masterName);
+        repl_msg.toCharArray(replyBuffer, sizeof(replyBuffer));
         DEBUG("that is a handshake! with: " + masterName);
+        DEBUG("my handshake reply: " + repl_msg);
         break;
     case (drive_pre):
         DEBUG("that is a drive cmd!");
