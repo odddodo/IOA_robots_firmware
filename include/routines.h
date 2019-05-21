@@ -77,8 +77,6 @@ void update_UI()
 
 void updateMotors()
 {
-
-    //decodeIncommingData(receiveBuffer);
     if (gotDriveData)
         drive(decodeIncommingData(receiveBuffer));
 }

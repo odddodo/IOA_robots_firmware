@@ -10,6 +10,7 @@
 #define DEBUG_ROUTINES 0
 #define DEBUG_UDP 0
 #define DEBUG_MOTORS 0
+#define DEBUG_CMD_MSGS 1
 
 #define SOFT_BAUDRATE 9600
 #define MOTOR_RAMPING 30 //intermediate setting
@@ -27,5 +28,7 @@
 #define F_TRI_LOL 50
 #define F_TRI_HI 100
 #define F_TRI_LOR 150
+
+#define REPLY_BUFF_SIZE 11
 
 #endif

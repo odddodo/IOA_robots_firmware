@@ -7,7 +7,7 @@
 
 int localPort = 8888;
 char receiveBuffer[UDP_TX_PACKET_MAX_SIZE];
-char replyBuffer[] = "blankReply";
+char replyBuffer[REPLY_BUFF_SIZE] = "blankReply";
 IPAddress myIP(192, 168, 0, 100);
 byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
 EthernetUDP Udp;
@@ -15,7 +15,7 @@ EthernetUDP Udp;
 bool gotSomeData = false;
 bool gotDriveData = false;
 
-const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R';
+const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R', fill_post = '!';
 String masterName;
 
 void initUDPServer()
@@ -27,6 +27,7 @@ void initUDPServer()
 void manageCmdMessages()
 {
     String repl_msg;
+    int r_msg_len;
     switch (receiveBuffer[0])
     {
     case (handshake_pre):
@@ -35,19 +36,39 @@ void manageCmdMessages()
         repl_msg.concat(reply_pre);
         repl_msg.concat(handshake_pre);
         repl_msg.concat(masterName);
-        repl_msg.toCharArray(replyBuffer, sizeof(replyBuffer));
-        DEBUG("that is a handshake! with: " + masterName);
-        DEBUG("my handshake reply: " + repl_msg);
+        r_msg_len = repl_msg.length();
+        if (DEBUG_CMD_MSGS)
+        {
+            DEBUG("that is a handshake! with: " + masterName);
+        }
+
         break;
     case (drive_pre):
-        DEBUG("that is a drive cmd!");
+        if (DEBUG_CMD_MSGS)
+        {
+            DEBUG("that is a drive cmd!");
+        }
         gotDriveData = true;
         break;
+    case (stop_pre):
+
+        break;
     default:
-        DEBUG("no idea what that is!");
+        if (DEBUG_CMD_MSGS)
+        {
+            DEBUG("no idea what that is!");
+        }
         gotDriveData = false;
         break;
     }
+    if (r_msg_len < REPLY_BUFF_SIZE)
+    {
+        for (int i = 0; i < REPLY_BUFF_SIZE - r_msg_len; i++)
+        {
+            repl_msg.concat(fill_post);
+        }
+    }
+    repl_msg.toCharArray(replyBuffer, REPLY_BUFF_SIZE);
 }
 
 void handleIncommmingPackets()
