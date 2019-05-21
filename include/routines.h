@@ -18,8 +18,8 @@ void handle_UDP_talking();
 void updateMotors();
 
 Ticker startupCounter(startup, 100, STARTUP_CYCLES); //power up cycle: give 25s for the router to settle//add 100nF cap on the reset pin of wiznet shield!!!
-Ticker UI_updater(update_UI, 4);                     //update ui every 4ms
-Ticker UDP_listener(handleIncommmingPackets, 4);     //handle incomming messages every 10ms
+Ticker UI_updater(update_UI, 4);
+Ticker UDP_listener(handleIncommmingPackets, 4);
 Ticker UDP_talker(handleReplies, 100);
 Ticker Motor_updater(updateMotors, 4);
 
@@ -78,7 +78,14 @@ void update_UI()
 void updateMotors()
 {
     if (gotDriveData)
+    {
         drive(decodeIncommingData(receiveBuffer));
+    }
+
+    else
+    {
+        halt();
+    }
 }
 
 #endif

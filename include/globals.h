@@ -30,5 +30,6 @@
 #define F_TRI_LOR 150
 
 #define REPLY_BUFF_SIZE 11
+#define NO_MASTER "?%*&#!$"
 
 #endif
