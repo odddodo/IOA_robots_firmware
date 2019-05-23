@@ -7,7 +7,7 @@
 
 int localPort = 8888;
 char receiveBuffer[UDP_TX_PACKET_MAX_SIZE];
-char replyBuffer[REPLY_BUFF_SIZE] = "nothingYet";
+char replyBuffer[REPLY_BUFF_SIZE] = "RA_ready!!";
 
 IPAddress myIP(192, 168, 0, 100);
 byte myMAC[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02};
@@ -16,12 +16,13 @@ EthernetUDP Udp;
 bool gotSomeData = false;
 bool gotDriveData = false;
 
-const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R', available_pre = 'A', fill_suffix = '!';
+const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', telemetry_pre = 'T', reply_pre = 'R', available_pre = 'A', fill_suffix = '!';
 
 String masterName;
 String reply_msg;
 String received_msg;
 int r_msg_len;
+int battVal = analogRead(0);
 
 void initUDPServer()
 {
@@ -64,6 +65,20 @@ void manageCmdMessages()
         }
         gotDriveData = true;
         break;
+    case (telemetry_pre):
+
+        if (!reply_msg.startsWith("R"))
+        {
+            reply_msg.concat(reply_pre);
+        }
+        reply_msg.concat(telemetry_pre);
+        reply_msg.concat(battVal);
+        if (DEBUG_CMD_MSGS)
+        {
+            DEBUG("battery value: !" + battVal);
+        }
+        break;
+
     case (stop_pre):
         if (!reply_msg.startsWith("R"))
         {
