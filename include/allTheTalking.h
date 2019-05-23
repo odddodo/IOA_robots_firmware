@@ -16,16 +16,12 @@ EthernetUDP Udp;
 bool gotSomeData = false;
 bool gotDriveData = false;
 
-const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R', fill_suffix = '!';
+const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', reply_pre = 'R', available_pre = 'A', fill_suffix = '!';
 
 String masterName;
 String reply_msg;
 String received_msg;
 int r_msg_len;
-// char masterName[11] = NO_MASTER;
-// char driveFeedbackMsg[11] = NO_MASTER;
-
-// char repl_msg[REPLY_BUFF_SIZE];
 
 void initUDPServer()
 {
@@ -47,10 +43,6 @@ void manageCmdMessages()
         }
         reply_msg.concat(handshake_pre);
         reply_msg.concat(masterName);
-        //strcat(repl_msg, (char *)'R');
-        //strcat(repl_msg, &handshake_pre);
-        //strcat(repl_msg, masterName);
-        //r_msg_len = sizeof(repl_msg);
 
         if (DEBUG_CMD_MSGS)
         {
@@ -59,10 +51,13 @@ void manageCmdMessages()
 
         break;
     case (drive_pre):
-        // strcat(repl_msg, &reply_pre);
-        // strcat(repl_msg, &drive_pre);
-        // strcat(repl_msg, driveFeedbackMsg);
-        //r_msg_len = sizeof(repl_msg);
+        if (!reply_msg.startsWith("R"))
+        {
+            reply_msg.concat(reply_pre);
+        }
+        reply_msg.concat(drive_pre);
+        reply_msg.concat("easy");
+
         if (DEBUG_CMD_MSGS)
         {
             //DEBUG("that is a drive cmd: " + driveFeedbackMsg);
@@ -70,12 +65,18 @@ void manageCmdMessages()
         gotDriveData = true;
         break;
     case (stop_pre):
+        if (!reply_msg.startsWith("R"))
+        {
+            reply_msg.concat(reply_pre);
+        }
+        reply_msg.concat(available_pre);
+        reply_msg.concat("stopped!");
         gotDriveData = false;
-        //masterName = NO_MASTER;
+        masterName = NO_MASTER;
         if (DEBUG_CMD_MSGS)
         {
             DEBUG("stopping immediately!");
-            // DEBUG(masterName);
+            DEBUG(masterName);
         }
         break;
     default:
@@ -86,15 +87,14 @@ void manageCmdMessages()
         gotDriveData = false;
         break;
     }
-    // if (r_msg_len < REPLY_BUFF_SIZE - 1)
-    // {
-    //     for (int i = 0; i < REPLY_BUFF_SIZE - r_msg_len - 1; i++)
-    //     {
-    //         strcat(repl_msg, &fill_suffix);
-    //     }
-    //     strcat(repl_msg, '\0');
-    // }
-    //strcpy(replyBuffer, reply_msg);
+    if (r_msg_len < REPLY_BUFF_SIZE - 1)
+    {
+        for (int i = 0; i < REPLY_BUFF_SIZE - r_msg_len - 1; i++)
+        {
+            reply_msg.concat(fill_suffix);
+        }
+    }
+
     reply_msg.toCharArray(replyBuffer, REPLY_BUFF_SIZE);
     if (DEBUG_CMD_MSGS)
     {
