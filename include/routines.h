@@ -23,6 +23,11 @@ Ticker UDP_listener(handleIncommmingPackets, 4);
 Ticker UDP_talker(handleReplies, 100);
 Ticker Motor_updater(updateMotors, 4);
 
+void checkSensors(int &val)
+{
+    val = analogRead(BATTPIN);
+}
+
 void initRoutines()
 {
     startupCounter.start();
@@ -61,6 +66,7 @@ void startup()
 
     if (startupCounter.counter() > STARTUP_CYCLES - 1)
     {
+
         UI_on = true;
         UDP_on = true;
         MOTORS_on = true;
@@ -73,6 +79,7 @@ void startup()
 void update_UI()
 {
     statusInd.update_UI(UI_updater.counter());
+    checkSensors(battVal);
 }
 
 void updateMotors()

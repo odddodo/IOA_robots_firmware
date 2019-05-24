@@ -3,6 +3,7 @@
 //all the settings here
 
 #define LEDPIN 6
+#define BATTPIN A0
 
 #define STARTUP_CYCLES 25
 #define DEBUG_BAUDRATE 9600

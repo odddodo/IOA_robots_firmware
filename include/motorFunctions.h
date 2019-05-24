@@ -47,10 +47,10 @@ void drive(int driveData[])
 
     //calculate speed and direction per motor:
 
-    int MFL_speed = (int)(FWD * AGGR_PWR(f_FWD, f_R, f_TR, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_L, f_TL, f_T_HLT));
-    int MFR_speed = (int)(FWD * AGGR_PWR(f_FWD, f_L, f_TL, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_R, f_TR, f_T_HLT));
-    int MBL_speed = (int)(FWD * AGGR_PWR(f_FWD, f_L, f_TR, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_R, f_TL, f_T_HLT));
-    int MBR_speed = (int)(FWD * AGGR_PWR(f_FWD, f_R, f_TL, f_T_HLT) + BCK * AGGR_PWR(f_BCK, f_L, f_TR, f_T_HLT));
+    int MFL_speed = (int)(SMAX * AGGR_PWR(f_FWD, f_R, f_TR, f_T_HLT) + (-SMAX) * AGGR_PWR(f_BCK, f_L, f_TL, f_T_HLT));
+    int MFR_speed = (int)(SMAX * AGGR_PWR(f_FWD, f_L, f_TL, f_T_HLT) + (-SMAX) * AGGR_PWR(f_BCK, f_R, f_TR, f_T_HLT));
+    int MBL_speed = (int)(SMAX * AGGR_PWR(f_FWD, f_L, f_TR, f_T_HLT) + (-SMAX) * AGGR_PWR(f_BCK, f_R, f_TL, f_T_HLT));
+    int MBR_speed = (int)(SMAX * AGGR_PWR(f_FWD, f_R, f_TL, f_T_HLT) + (-SMAX) * AGGR_PWR(f_BCK, f_L, f_TR, f_T_HLT));
 
     //drive the thing:
 

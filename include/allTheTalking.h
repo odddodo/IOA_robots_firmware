@@ -22,7 +22,11 @@ String masterName;
 String reply_msg;
 String received_msg;
 int r_msg_len;
-int battVal = analogRead(0);
+
+int sensorFeedbackTimer = 0;
+int sendSensorUpdateEvery = 50;
+
+int battVal = 1024;
 
 void initUDPServer()
 {
@@ -36,7 +40,7 @@ void manageCmdMessages()
     switch (receiveBuffer[0])
     {
     case (handshake_pre):
-        masterName = received_msg.substring(2);
+        masterName = received_msg.substring(2, 9);
 
         if (!reply_msg.startsWith("R"))
         {
@@ -52,12 +56,27 @@ void manageCmdMessages()
 
         break;
     case (drive_pre):
-        if (!reply_msg.startsWith("R"))
+        if (sensorFeedbackTimer < sendSensorUpdateEvery)
         {
-            reply_msg.concat(reply_pre);
+            if (!reply_msg.startsWith("R"))
+            {
+                reply_msg.concat(reply_pre);
+            }
+            reply_msg.concat(drive_pre);
+            reply_msg.concat("easy");
+            sensorFeedbackTimer++;
         }
-        reply_msg.concat(drive_pre);
-        reply_msg.concat("easy");
+        else if (sensorFeedbackTimer == sendSensorUpdateEvery)
+        {
+
+            if (!reply_msg.startsWith("R"))
+            {
+                reply_msg.concat(reply_pre);
+            }
+            reply_msg.concat(telemetry_pre);
+            reply_msg.concat(battVal);
+            sensorFeedbackTimer = 0;
+        }
 
         if (DEBUG_CMD_MSGS)
         {
@@ -92,6 +111,17 @@ void manageCmdMessages()
         {
             DEBUG("stopping immediately!");
             DEBUG(masterName);
+        }
+        break;
+    case (available_pre):
+        if (masterName = NO_MASTER)
+        {
+            if (!reply_msg.startsWith("R"))
+            {
+                reply_msg.concat(reply_pre);
+            }
+            reply_msg.concat(available_pre);
+            reply_msg.concat("available");
         }
         break;
     default:
