@@ -18,7 +18,7 @@ bool gotDriveData = false;
 
 const char drive_pre = 'D', stop_pre = 'S', handshake_pre = 'H', telemetry_pre = 'T', reply_pre = 'R', available_pre = 'A', fill_suffix = '!';
 
-String masterName;
+String masterName = NO_MASTER;
 String reply_msg;
 String received_msg;
 int r_msg_len;
@@ -40,7 +40,10 @@ void manageCmdMessages()
     switch (receiveBuffer[0])
     {
     case (handshake_pre):
-        masterName = received_msg.substring(2, 9);
+        if (masterName == NO_MASTER)
+        {
+            masterName = received_msg.substring(2, 9);
+        }
 
         if (!reply_msg.startsWith("R"))
         {

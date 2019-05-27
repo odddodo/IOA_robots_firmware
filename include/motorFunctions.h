@@ -29,8 +29,8 @@ double AGGR_PWR(double sp, double dir, double trn, double hlt)
 void drive(int driveData[])
 {
     int FB = driveData[0];
-    int LR = driveData[1];
-    int TRN = driveData[2];
+    int LR = driveData[2];
+    int TRN = driveData[1];
     int SMAX = driveData[3];
 
     //translate crisp joystic values into fuzzy set membership degrees:
