@@ -5,6 +5,8 @@
 #define LEDPIN 6
 #define BATTPIN A0
 
+#define IS_DANDY true
+
 #define STARTUP_CYCLES 25
 #define DEBUG_BAUDRATE 9600
 #define DEBUG_UI 0
